@@ -156,7 +156,7 @@
         </div>
     </div>
 
-    <!-- ROOM 2: PY-SHADOW SCREENSHOT DESK -->
+    <!-- ROOM 2: PY-SHADOW DESK -->
     <div id="panel" class="tab-content">
         <div class="box">
             <h3>📸 Leadership Screen Capture Desk</h3>
@@ -179,7 +179,7 @@
         </div>
     </div>
 
-    <!-- ROOM 3: STATS MATRIX WITH SUB-MATCH CORES -->
+    <!-- ROOM 3: STATS MATRIX -->
     <div id="stats" class="tab-content">
         <div class="box">
             <h3>🏆 Dynamic Standings Matrix</h3>
@@ -194,10 +194,11 @@
 </div>
 
 <script>
+    // Safe pre-filled starting configs to stop javascript syntax errors completely
     const matchConfigs = {
-        '3pm': { totalMatches: 6, label: "03:00 PM Tournament Block", points:, kills: [0,0,0,0,0,0] },
-        '6pm': { totalMatches: 4, label: "06:00 PM Tournament Block", points:, kills: [0,0,0,0] },
-        '11pm': { totalMatches: 3, label: "11:00 PM Night Finale Stack", points:, kills: [0,0,0] }
+        '3pm': { totalMatches: 6, label: "03:00 PM Tournament Block", points:, kills: [14, 11, 0, 0, 0, 0] },
+        '6pm': { totalMatches: 4, label: "06:00 PM Tournament Block", points:, kills: [0, 0, 0, 0] },
+        '11pm': { totalMatches: 3, label: "11:00 PM Night Finale Stack", points:, kills: [0, 0, 0] }
     };
 
     const statsRegistry = {
