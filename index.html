@@ -111,6 +111,7 @@
             padding: 8px;
             font-size: 12px;
             border-bottom: 1px solid #2d2d37;
+            text-align: center;
         }
         th { color: #c99d42; text-transform: uppercase; }
     </style>
@@ -121,9 +122,9 @@
     <h2>🛡️ PY-ESPORTS CORE NETWORK</h2>
     
     <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('gate')">🔑 Attendance</button>
-        <button class="tab-btn" onclick="switchTab('panel')">📸 SS Uplink</button>
-        <button class="tab-btn" onclick="switchTab('stats')">📊 Stats Matrix</button>
+        <button id="tbtn-gate" class="tab-btn active" onclick="switchTab('gate')">🔑 Attendance</button>
+        <button id="tbtn-panel" class="tab-btn" onclick="switchTab('panel')">📸 SS Uplink</button>
+        <button id="tbtn-stats" class="tab-btn" onclick="switchTab('stats')">📊 Stats Matrix</button>
     </div>
 
     <!-- ROOM 1: GMAIL CHECK-IN GATE -->
@@ -162,7 +163,7 @@
             <p style="font-size:12px; color:#a0a0a5;">This panel is restricted to Guild Leader **PY-SHADOW** to upload endgame lobby score data.</p>
             
             <label>Lobby Sector Target</label>
-            <select id="ocrMatchSelect" onchange="updateMatchConfigLabel()">
+            <select id="ocrMatchSelect">
                 <option value="3pm">03:00 PM Match Lobby (6 Map Stack)</option>
                 <option value="6pm">06:00 PM Match Lobby (4 Map Stack)</option>
                 <option value="11pm">11:00 PM Night Finale (3 Map Stack)</option>
@@ -194,9 +195,9 @@
 
 <script>
     const matchConfigs = {
-        '3pm': { totalMatches: 6, label: "03:00 PM Tournament Block", points:, kills: [5, 4, 3, 2, 4, 3] },
-        '6pm': { totalMatches: 4, label: "06:00 PM Tournament Block", points:, kills: [4, 2, 5, 3] },
-        '11pm': { totalMatches: 3, label: "11:00 PM Night Finale Stack", points:, kills: [6, 4, 2] }
+        '3pm': { totalMatches: 6, label: "03:00 PM Tournament Block", points:, kills: [0,0,0,0,0,0] },
+        '6pm': { totalMatches: 4, label: "06:00 PM Tournament Block", points:, kills: [0,0,0,0] },
+        '11pm': { totalMatches: 3, label: "11:00 PM Night Finale Stack", points:, kills: [0,0,0] }
     };
 
     const statsRegistry = {
@@ -212,8 +213,13 @@
     function switchTab(id) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-        document.getElementById(id).classList.add('active');
+        
+        const targetBtn = document.getElementById('tbtn-' + id);
+        if(targetBtn) targetBtn.classList.add('active');
+        
+        const targetContent = document.getElementById(id);
+        if(targetContent) targetContent.classList.add('active');
+        
         if(id === 'stats') {
             renderLeaderboardTracking();
             renderPlayerProfiles();
@@ -240,7 +246,7 @@
 
     function previewScreenshot() {
         const file = document.getElementById('fileUpload').files;
-        if(file) document.getElementById('previewContainer').style.display = 'block';
+        if(file.length > 0) document.getElementById('previewContainer').style.display = 'block';
     }
 
     function parseTelemetryScreenshot() {
@@ -252,12 +258,7 @@
             return;
         }
 
-        statsRegistry['PY-SHADOW'].kills += 8;
-        statsRegistry['PY-SHADOW'].damage += 2400;
-        statsRegistry['PY-EMPIRE'].kills += 6;
-        statsRegistry['PY-EMPIRE'].damage += 1900;
-
-        alert(`Automation Hub: Back-to-back maps for ${target} telemetry successfully synchronized inside matrix data sets!`);
-    }
-
-  
+        if(target === '3pm') {
+            matchConfigs['3pm'].points =;
+            matchConfigs['3pm'].kills =;
+            
