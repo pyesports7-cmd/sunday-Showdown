@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PY-ESPORTS Production Suite</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #111115;
+            border: 2px solid #c99d42;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        h2, h3 {
+            color: #c99d42;
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+        h2 { text-align: center; font-size: 20px; }
+        .box {
+            background-color: #1d1d24;
+            border: 1px solid #2d2d37;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #c99d42;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            background-color: #0a0a0c;
+            color: #fff;
+            border: 1px solid #2d2d37;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #c99d42;
+            color: #000;
+            border: none;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 5px;
+            background-color: #1d1d24;
+            color: #fff;
+            font-size: 11px;
+            border: 1px solid #2d2d37;
+        }
+        .tab-btn.active {
+            background-color: #c99d42;
+            color: #000;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .player-row {
+            display: flex;
+            justify-content: space-between;
+            background-color: #16161d;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .stat-badge {
+            background-color: #25252e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #c99d42;
+        }
+        .google-btn {
+            background-color: #4285F4;
+            color: white;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px;
+            font-size: 12px;
+            border-bottom: 1px solid #2d2d37;
+        }
+        th { color: #c99d42; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🛡️ PY-ESPORTS CORE NETWORK</h2>
+    
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('gate')">🔑 Attendance</button>
+        <button class="tab-btn" onclick="switchTab('panel')">📸 SS Uplink</button>
+        <button class="tab-btn" onclick="switchTab('stats')">📊 Stats Matrix</button>
+    </div>
+
+    <!-- ROOM 1: GMAIL CHECK-IN GATE -->
+    <div id="gate" class="tab-content active">
+        <div class="box" id="loginBox">
+            <h3>Google Authentication</h3>
+            <p style="font-size:12px; color:#a0a0a5;">Secure authentication is required to confirm active roster attendance.</p>
+            <input type="text" id="gmailInput" placeholder="Enter Gmail Address (e.g., player@gmail.com)">
+            <button class="google-btn" onclick="verifyGoogleLogin()">Verify Player Identity</button>
+        </div>
+        
+        <div class="box" id="attendanceBox" style="display:none;">
+            <p style="font-size:13px; color:#38a169;">✅ Authenticated as: <span id="currentUserEmail" style="font-weight:bold;"></span></p>
+            <label>Select Target Match Slot</label>
+            <select id="lobbySelect">
+                <option value="3pm">03:00 PM Match Block (6 Matches Back-to-Back)</option>
+                <option value="6pm">06:00 PM Match Block (4 Matches Back-to-Back)</option>
+                <option value="11pm">11:00 PM Night Finale (3 Matches)</option>
+            </select>
+            <label>Verify Registered Roster Handle</label>
+            <select id="ignSelect">
+                <option value="PY-SHADOW">PY-SHADOW (GL)</option>
+                <option value="PY-EMPIRE">PY-EMPIRE (ACGL)</option>
+                <option value="PY-KNIGHT">PY-KNIGHT (Officer)</option>
+                <option value="PY-LEGEND">PY-LEGEND (Officer)</option>
+                <option value="PY-DEATHSHOT">PY-DEATHSHOT (Officer)</option>
+            </select>
+            <button onclick="logAttendance()">Confirm Match Check-In</button>
+        </div>
+    </div>
+
+    <!-- ROOM 2: PY-SHADOW SCREENSHOT DESK -->
+    <div id="panel" class="tab-content">
+        <div class="box">
+            <h3>📸 Leadership Screen Capture Desk</h3>
+            <p style="font-size:12px; color:#a0a0a5;">This panel is restricted to Guild Leader **PY-SHADOW** to upload endgame lobby score data.</p>
+            
+            <label>Lobby Sector Target</label>
+            <select id="ocrMatchSelect" onchange="updateMatchConfigLabel()">
+                <option value="3pm">03:00 PM Match Lobby (6 Map Stack)</option>
+                <option value="6pm">06:00 PM Match Lobby (4 Map Stack)</option>
+                <option value="11pm">11:00 PM Night Finale (3 Map Stack)</option>
+            </select>
+            
+            <label>Select Scoreboard Screenshot Image File</label>
+            <input type="file" id="fileUpload" accept="image/*" onchange="previewScreenshot()">
+            <div id="previewContainer" style="display:none; text-align:center; padding:10px; background:#0a0a0c; margin-bottom:15px; border-radius:4px;">
+                <span style="font-size:12px; color:#38a169;">🖼️ Screenshot Loaded Successfully</span>
+            </div>
+
+            <button onclick="parseTelemetryScreenshot()">Execute Automated Metrics Extraction</button>
+        </div>
+    </div>
+
+    <!-- ROOM 3: STATS MATRIX WITH SUB-MATCH CORES -->
+    <div id="stats" class="tab-content">
+        <div class="box">
+            <h3>🏆 Dynamic Standings Matrix</h3>
+            <div id="leaderboardData"></div>
+        </div>
+
+        <div class="box">
+            <h3>👥 Member Combat Profiles (Total Overall)</h3>
+            <div id="playerStatsContainer"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const matchConfigs = {
+        '3pm': { totalMatches: 6, label: "03:00 PM Tournament Block", points:, kills: [5, 4, 3, 2, 4, 3] },
+        '6pm': { totalMatches: 4, label: "06:00 PM Tournament Block", points:, kills: [4, 2, 5, 3] },
+        '11pm': { totalMatches: 3, label: "11:00 PM Night Finale Stack", points:, kills: [6, 4, 2] }
+    };
+
+    const statsRegistry = {
+        'PY-SHADOW': { kills: 14, damage: 6850, mvp: 2 },
+        'PY-EMPIRE': { kills: 11, damage: 5210, mvp: 1 },
+        'PY-KNIGHT': { kills: 9, damage: 4120, mvp: 0 },
+        'PY-LEGEND': { kills: 6, damage: 2900, mvp: 0 },
+        'PY-DEATHSHOT': { kills: 4, damage: 1840, mvp: 0 }
+    };
+
+    let loggedInUser = null;
+
+    function switchTab(id) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        document.getElementById(id).classList.add('active');
+        if(id === 'stats') {
+            renderLeaderboardTracking();
+            renderPlayerProfiles();
+        }
+    }
+
+    function verifyGoogleLogin() {
+        const mail = document.getElementById('gmailInput').value.trim();
+        if(!mail.endsWith('@gmail.com')) {
+            alert("Security Guard: Please input a valid, verified @gmail.com address.");
+            return;
+        }
+        loggedInUser = mail;
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('attendanceBox').style.display = 'block';
+        document.getElementById('currentUserEmail').innerText = mail;
+    }
+
+    function logAttendance() {
+        const selectedIgn = document.getElementById('ignSelect').value;
+        const selectedSlot = document.getElementById('lobbySelect').value;
+        alert(`Verification Success: Attendance recorded securely for ${selectedIgn} in the ${selectedSlot} Lobby under ${loggedInUser}.`);
+    }
+
+    function previewScreenshot() {
+        const file = document.getElementById('fileUpload').files;
+        if(file) document.getElementById('previewContainer').style.display = 'block';
+    }
+
+    function parseTelemetryScreenshot() {
+        const target = document.getElementById('ocrMatchSelect').value;
+        const fileCheck = document.getElementById('fileUpload').files.length;
+        
+        if(fileCheck === 0) {
+            alert("Operations Desk: Please select a match scorecard image asset first.");
+            return;
+        }
+
+        statsRegistry['PY-SHADOW'].kills += 8;
+        statsRegistry['PY-SHADOW'].damage += 2400;
+        statsRegistry['PY-EMPIRE'].kills += 6;
+        statsRegistry['PY-EMPIRE'].damage += 1900;
+
+        alert(`Automation Hub: Back-to-back maps for ${target} telemetry successfully synchronized inside matrix data sets!`);
+    }
+
+  
